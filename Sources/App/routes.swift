@@ -19,6 +19,14 @@ func routes(_ app: Application) throws {
         let createdAt = formatter.string(from: currentDate)
         return createdAt
     }
+    
+    // http://127.0.0.1:8080/addTasks
+    app.post("addTasks") { req -> TODO in
+        let todo = try req.content.decode(TODO.self)
+        let ToDoObj = TODO(objective: todo.objective, createdAt: todo.createdAt)
+        tasksArr.append(ToDoObj)
+        return ToDoObj
+    }
 
     try app.register(collection: TodoController())
 }
