@@ -1,13 +1,23 @@
 import Fluent
 import Vapor
+import Foundation
 
 func routes(_ app: Application) throws {
-    app.get { req in
-        return "It works!"
+    
+   var tasksArr = [TODO(objective: "Cooking", createdAt: getTime()),
+                   TODO(objective: "Watcing TV", createdAt: getTime())]
+    
+    app.get("tasks") { req -> [TODO] in
+        return tasksArr
     }
-
-    app.get("hello") { req -> String in
-        return "Hello, world!"
+    
+    func getTime() -> String {
+        let currentDate = Date()
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .medium
+        let createdAt = formatter.string(from: currentDate)
+        return createdAt
     }
 
     try app.register(collection: TodoController())
